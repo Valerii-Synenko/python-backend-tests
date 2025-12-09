@@ -8,15 +8,13 @@ from pydantic import BaseModel
 class RegisterUserModel(BaseModel):
     """
     Representation of payload model for API request to user registration.
-    This model is intentionally NOT validated.
-    You can use any values you want in your payload model.
+    Fields use `Any` so that you can generate any malformed data needed for negative testing as well
+    as valid data for positive testing.
 
-    Fields use `Any` so that we can generate:
-      - invalid types,
-      - invalid formats,
-      - missing fields,
-      - empty strings,
-      - or any malformed data needed for negative testing.
+    Mandatory Fields:
+      - username,
+      - password,
+      - email
     """
 
     username: Any
