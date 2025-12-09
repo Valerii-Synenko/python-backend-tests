@@ -5,7 +5,7 @@ from typing import Optional, Any
 from pydantic import BaseModel
 
 
-class Model(BaseModel):
+class RegisterUserModel(BaseModel):
     """
     Representation of payload model for API request to user registration.
     This model is intentionally NOT validated.
