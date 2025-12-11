@@ -1,15 +1,23 @@
+import os
+
 import pytest
+from dotenv import load_dotenv
 from faker import Faker
+
+load_dotenv()
 
 
 @pytest.fixture
 def faker() -> Faker:
     """
     The fixture provides client for Faker.
-    By default, it is using Croatian locale.
+    The client has customizable locale.
 
     Returns:
         Faker: Faker object
 
     """
-    return Faker(locale="hr_HR")
+
+    locale: str = os.getenv("FAKER_LOCALE")
+
+    return Faker(locale=locale)

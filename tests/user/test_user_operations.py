@@ -17,12 +17,9 @@ Typical usage example:
 import os
 
 import requests
-from dotenv import load_dotenv
 
 from src.models.requests.register_user_requests import RegisterUserRequestsModel
 from src.models.responses.register_user_response import RegisterUserResponseModel
-
-load_dotenv()
 
 
 class TestUserOperations:
