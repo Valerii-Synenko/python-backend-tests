@@ -12,5 +12,5 @@ class RegisterUserResponseModel(BaseModel):
     @field_validator("id")
     def validate_age(cls, v):
         if len(v) != 24:
-            raise ValueError(f"id must be string with 24 characters, but got {v}")
+            raise ValueError(f"id must be string with 24 characters, but got '{v}' ({len(v)} characters).")
         return v
