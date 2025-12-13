@@ -4,6 +4,8 @@ import pytest
 from dotenv import load_dotenv
 from faker import Faker
 
+from src.api_clients.user_client import UserClient
+
 load_dotenv()
 
 
@@ -17,7 +19,14 @@ def faker() -> Faker:
         Faker: Faker object
 
     """
-
     locale: str = os.getenv("FAKER_LOCALE")
 
     return Faker(locale=locale)
+
+
+@pytest.fixture
+def user_client():
+    """Crete UserClient object. And after test close the session."""
+    client = UserClient()
+    yield client
+    client.close_session()
