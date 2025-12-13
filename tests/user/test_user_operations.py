@@ -14,17 +14,13 @@ Typical usage example:
     pytest tests/test_user_operations.py::TestUserOperations::test_user_registration
 """
 
-import os
-
-import requests
-
 from src.models.requests.register_user_requests import RegisterUserRequestsModel
 from src.models.responses.register_user_response import RegisterUserResponseModel
 
 
 class TestUserOperations:
 
-    def test_user_registration_with_valid_creds(self, faker):
+    def test_user_registration_with_valid_creds(self, user_client, faker):
 
         user_model = RegisterUserRequestsModel(
             username=faker.user_name(),
@@ -32,11 +28,7 @@ class TestUserOperations:
             password=faker.password(),
         )
 
-        response = requests.post(
-            url=f"{os.getenv('BASE_URL')}/register",
-            headers={"Content-Type": "application/json"},
-            data=user_model.model_dump_json(),
-        )
+        response = user_client.user_register(user_model=user_model)
 
         assert response.status_code == 200
 
