@@ -13,14 +13,13 @@ load_dotenv()
 def faker() -> Faker:
     """
     The fixture provides client for Faker.
-    The client has customizable locale.
+    The client has customizable locale. If the FAKER_LOCALE is unset, the `en_US` will be used as a default.
 
     Returns:
-        Faker: Faker object
+        Faker: Faker object with specified locale.
 
     """
-    locale: str | None = os.getenv("FAKER_LOCALE")
-
+    locale: str | None = os.getenv("FAKER_LOCALE", "en_US")
     return Faker(locale=locale)
 
 
