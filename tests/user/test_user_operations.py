@@ -15,28 +15,30 @@ Typical usage example:
 """
 
 import allure
+import pytest
+from requests import Response
 
-from src.models.requests.register_user_requests import RegisterUserRequestsModel
-from src.models.responses.register_user_response import RegisterUserResponseModel
+from src.models.responses.register_user_response import (
+    RegisterUserResponseModel as ResponseModel,
+)
+from tests.data.user_data import user_data
 
 
 class TestUserOperations:
 
-    def test_user_registration_with_valid_creds(self, user_client, faker):
+    @allure.title("User registration")
+    @allure.description("Test is verifying that a user can do registration with specified fields.")
+    @allure.severity(allure.severity_level.CRITICAL)
+    @pytest.mark.parametrize("request_model", user_data.valid_registration_models)
+    def test_user_registration(self, user_client, request_model):
 
-        with allure.step("Step 1: Register new user"):
-            user_model = RegisterUserRequestsModel(
-                username=faker.user_name(),
-                email=faker.email(),
-                password=faker.password(),
-            )
-
-            response = user_client.user_register(user_model=user_model)
+        with allure.step("Step 1: Register new user with"):
+            response: Response = user_client.user_register(user_model=request_model)
 
         with allure.step("Step 2: Assert that status code is 200"):
             assert (
                 response.status_code == 200
-            ), f"the request with {user_model.model_dump()} returned status code: {response.status_code}"
+            ), f"the request with body '{request_model.model_dump()}' returned status code: {response.status_code}"
 
         with allure.step("Step 3: Validate response body"):
-            RegisterUserResponseModel.model_validate(response.json())
+            ResponseModel.model_validate(response.json())
