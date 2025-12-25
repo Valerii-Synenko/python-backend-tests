@@ -2,7 +2,7 @@
 
 from faker import Faker
 
-from models.requests.register_user_requests import RegisterUserRequestsModel
+from src.models.requests.register_user_requests import RegisterUserRequestsModel
 
 
 class UserData:
