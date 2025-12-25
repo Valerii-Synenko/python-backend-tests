@@ -17,14 +17,15 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
+    - id: check-docstring-first     # ensures docstring is first statement
     - id: trailing-whitespace       # removes trailing spaces at line ends
     - id: end-of-file-fixer         # ensures files end with a newline
     - id: check-toml                # validates TOML file syntax
     - id: check-merge-conflict      # detects merge conflict markers
-    - id: check-docstring-first     # ensures docstring is first statement
     - id: debug-statements          # finds leftover print() and debugger statements
     - id: name-tests-test           # ensures test files follow naming convention
       args: ['--pytest-test-first']
+      exclude: ^tests/(data|helpers)/
     - id: check-ast                 # validates Python syntax
 
   # Mypy - static type checking
