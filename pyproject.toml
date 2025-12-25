@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "pyresttest"
-version = "0.1.0"
+name = "python-backend-tests"
+version = "0.1.1"
 description = "Back End automated testing pet-project"
 authors = ["valerii synenko <valerii.synenko@gmail.com>"]
 readme = "README.md"
