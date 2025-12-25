@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from pydantic import BaseModel, Field
 
 
@@ -7,4 +9,4 @@ class RegisterUserResponseModel(BaseModel):
     The response has only one field - id.
     """
 
-    id: str = Field(min_length=24, max_length=24)
+    id: Annotated[str, Field(min_length=24, max_length=24)]
