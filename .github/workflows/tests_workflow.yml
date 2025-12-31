@@ -73,7 +73,6 @@ jobs:
 
       - name: Run pytest with Allure
         run: poetry run pytest --alluredir=allure-results -v
-        continue-on-error: true
 
       - name: Docker compose down
         if: always()
