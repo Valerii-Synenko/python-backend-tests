@@ -16,6 +16,10 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    env:
+      BASE_URL: http://localhost/
+      FAKER_LOCALE: hr_HR
+
     steps:
       - name: Checkout test-framework
         uses: actions/checkout@v4
@@ -108,6 +112,29 @@ jobs:
           fi
 
           allure generate allure-results -o allure-report --clean
+
+      - name: Add Allure executor info
+        if: always()
+        run: |
+          cat > allure-results/executor.json << EOF
+          {
+            "name": "GitHub Actions",
+            "type": "github",
+            "buildUrl": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          }
+          EOF
+
+      - name: Add Allure metadata
+        if: always()
+        run: |
+          cat > allure-results/environment.properties << EOF
+          env=GitHub CI
+          base_url=http://localhost/
+          os=ubuntu-latest
+          git_branch=${{ github.ref_name }}
+          git_commit=${{ github.event.head_commit.message }}
+          git_run_number=${{ github.run_number }}
+          EOF
 
       - name: Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
