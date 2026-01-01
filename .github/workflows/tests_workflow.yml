@@ -7,7 +7,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-run-name: "🚀 test run #${{ github.run_number }}:  ${{ github.event.head_commit.message }}"
+run-name: "🚀 (test run #${{ github.run_number }})  ${{ github.event.head_commit.message }}"
 
 permissions:
   contents: write
@@ -96,7 +96,7 @@ jobs:
 
       - name: Run pytest with Allure
         run: |
-          poetry run pytest --alluredir=allure-results -v
+          .venv/bin/pytest --alluredir=allure-results -v
         continue-on-error: true
 
       - name: Tear down Environment
