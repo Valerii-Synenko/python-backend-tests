@@ -87,16 +87,22 @@ jobs:
 
       - name: Cache Poetry dependencies
         uses: actions/cache@v3
+        id: cache
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-${{ runner.os }}-py3.13-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-${{ runner.os }}-py3.13-
 
       - name: Install dependencies
-        run: poetry install --no-interaction --no-root
+        run: |
+          poetry install --no-interaction --no-root
+          echo "Verifying installation:"
+          ls -la .venv/bin/ | grep pytest || echo "pytest not found!"
 
       - name: Run pytest with Allure
         run: |
-          .venv/bin/pytest --alluredir=allure-results -v
+          poetry run pytest --alluredir=allure-results -v
         continue-on-error: true
 
       - name: Tear down Environment
