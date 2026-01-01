@@ -1,1 +1,1 @@
-[]
+[{"values":["GitHub CI"],"name":"env"},{"values":["http://localhost/"],"name":"base_url"},{"values":["ubuntu-latest"],"name":"os"},{"values":["main"],"name":"git_branch"},{"values":["ci: Update workflow Cache Poetry dependencies"],"name":"git_commit"},{"values":["Valerii-Synenko"],"name":"user_that_triggered"}]
