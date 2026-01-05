@@ -172,12 +172,12 @@ jobs:
           }
           EOF
 
-          🏷️ ENV=GitHub CI
-          💻 OS=ubuntu-latest
-          🌐 URL=http://localhost/
-          🌿 BRANCH=${{ github.ref_name }}
-          📝 COMMIT=${{ github.event.head_commit.message }}
-          👤 TRIGGERED=@${{ github.actor }}
+          ENV=GitHub CI
+          OS=ubuntu-latest
+          URL=http://localhost/
+          BRANCH=${{ github.ref_name }}
+          COMMIT=${{ github.event.head_commit.message }}
+          TRIGGERED=@${{ github.actor }}
           EOF
 
       - name: Generate Allure Report (with history)
