@@ -172,13 +172,12 @@ jobs:
           }
           EOF
 
-          cat > allure-results/environment.properties << EOF
-          env=GitHub CI
-          base_url=http://localhost/
-          os=ubuntu-latest
-          git_branch=${{ github.ref_name }}
-          git_commit=${{ github.event.head_commit.message }}
-          user_that_triggered=${{ github.actor }}
+          🏷️ ENV=GitHub CI
+          💻 OS=ubuntu-latest
+          🌐 URL=http://localhost/
+          🌿 BRANCH=${{ github.ref_name }}
+          📝 COMMIT=${{ github.event.head_commit.message }}
+          👤 TRIGGERED=@${{ github.actor }}
           EOF
 
       - name: Generate Allure Report (with history)
