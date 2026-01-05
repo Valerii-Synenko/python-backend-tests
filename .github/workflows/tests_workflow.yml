@@ -172,6 +172,7 @@ jobs:
           }
           EOF
 
+          cat > allure-results/environment.properties << EOF
           ENV=GitHub CI
           OS=ubuntu-latest
           URL=http://localhost/
