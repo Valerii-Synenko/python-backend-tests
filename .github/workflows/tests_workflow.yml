@@ -39,6 +39,12 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}
+
+    env:
+      BASE_URL: ${{ vars.BASE_URL }}
+      FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
+
     steps:
       - name: Checkout test-framework
         uses: actions/checkout@v4
