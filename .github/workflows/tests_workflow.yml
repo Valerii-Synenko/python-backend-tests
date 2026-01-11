@@ -20,9 +20,9 @@ on:
         type: choice
         required: true
         options:
-          - dev
-          - qa
-        default: "dev"
+          - DEV
+          - QA
+        default: DEV
 
 
 # Uncomment schedule event if it needs you.
