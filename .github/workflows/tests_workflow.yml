@@ -24,6 +24,10 @@ on:
           - QA
         default: DEV
 
+env:
+  BASE_URL: ${{ vars.BASE_URL }}
+  FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
+
 
 # Uncomment schedule event if it needs you.
 # By default, it set for running every day at 4:00 AM.
@@ -39,11 +43,7 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    environment: ${{ inputs.env }}
-
-    env:
-      BASE_URL: ${{ vars.BASE_URL }}
-      FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
+    environment: ${{ inputs.env || 'DEV' }}
 
     steps:
       - name: Checkout test-framework
