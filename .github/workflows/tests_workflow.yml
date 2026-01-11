@@ -14,6 +14,15 @@ on:
       - main
 
   workflow_dispatch:
+    inputs:
+      env:
+        description: Select environment
+        type: choice
+        required: true
+        options:
+          - dev
+          - qa
+        default: "dev"
 
 
 # Uncomment schedule event if it needs you.
@@ -30,10 +39,6 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    env:
-      BASE_URL: http://localhost/
-      FAKER_LOCALE: hr_HR
-
     steps:
       - name: Checkout test-framework
         uses: actions/checkout@v4
