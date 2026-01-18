@@ -1,0 +1,12 @@
+name: Scheduling test run
+on:
+  schedule:
+    - cron: "0 4 * * *"
+
+
+jobs:
+  trigger-main:
+    name: Trigger Main Workflow
+    uses: ./.github/workflows/tests_workflow.yml
+    with:
+      env: dev

@@ -24,6 +24,12 @@ on:
           - QA
         default: DEV
 
+  workflow_call:
+    inputs:
+      env:
+        type: string
+        default: DEV
+
 env:
   BASE_URL: ${{ vars.BASE_URL }}
   FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
