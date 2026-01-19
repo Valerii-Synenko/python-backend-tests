@@ -56,10 +56,10 @@ jobs:
 
     steps:
       - name: Checkout test-framework
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout microservices-demo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: Valerii-Synenko/microservices-demo
           path: microservices-demo
@@ -161,7 +161,7 @@ jobs:
 
     steps:
       - name: Checkout test-framework repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download Allure results
         uses: actions/download-artifact@v4
@@ -170,7 +170,7 @@ jobs:
           path: allure-results
 
       - name: Checkout gh-pages branch to get Allure reports history
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         continue-on-error: true
         with:
           ref: gh-pages
