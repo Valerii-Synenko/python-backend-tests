@@ -30,9 +30,9 @@ on:
         type: string
         default: DEV
 
-env:
-  BASE_URL: ${{ vars.BASE_URL }}
-  FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
+#env:
+#  BASE_URL: ${{ vars.BASE_URL }}
+#  FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
 
 
 # Uncomment schedule event if it needs you.
@@ -50,6 +50,9 @@ jobs:
     name: Run Tests
     runs-on: ubuntu-latest
     environment: ${{ inputs.env || 'DEV' }}
+    env:
+      BASE_URL: ${{ vars.BASE_URL }}
+      FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
 
     steps:
       - name: Checkout test-framework

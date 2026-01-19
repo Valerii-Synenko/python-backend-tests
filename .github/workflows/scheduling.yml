@@ -3,10 +3,22 @@ on:
   schedule:
     - cron: "0 4 * * *"
 
+  workflow_dispatch:
+    inputs:
+      env:
+        description: Select environment
+        type: choice
+        required: true
+        options:
+          - DEV
+          - QA
+        default: DEV
+
+run-name: "⏰ Scheduled test run on ${{ inputs.env || 'DEV' }}"
 
 jobs:
   trigger-main:
     name: Trigger Main Workflow
     uses: ./.github/workflows/tests_workflow.yml
     with:
-      env: dev
+      env: ${{ inputs.env || 'DEV' }}
