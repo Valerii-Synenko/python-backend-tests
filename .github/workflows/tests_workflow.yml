@@ -30,16 +30,6 @@ on:
         type: string
         default: DEV
 
-#env:
-#  BASE_URL: ${{ vars.BASE_URL }}
-#  FAKER_LOCALE: ${{ vars.FAKER_LOCALE }}
-
-
-# Uncomment schedule event if it needs you.
-# By default, it set for running every day at 4:00 AM.
-#  schedule:
-#    - "0 4 * * *"
-
 run-name: "🚀 (test run #${{ github.run_number }})  ${{ github.event.head_commit.message }}"
 
 permissions:
@@ -109,7 +99,7 @@ jobs:
           echo "✅ All services ready!"
 
       - name: Install Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
