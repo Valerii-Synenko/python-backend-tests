@@ -1,0 +1,12 @@
+name: Scheduled DEV Tests
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+
+jobs:
+  trigger-tests:
+    name: ⏰ Trigger Tests Workflow (QA)
+    uses: ./.github/workflows/tests_workflow.yml
+    with:
+      env: QA
