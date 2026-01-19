@@ -1,4 +1,4 @@
-name: Scheduled DEV Tests
+name: Scheduled daily run
 
 on:
   schedule:
