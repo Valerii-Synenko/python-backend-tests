@@ -16,6 +16,9 @@ on:
 
 run-name: "⏰ Scheduled test run on ${{ inputs.env || 'DEV' }}"
 
+permissions:
+  contents: write
+
 jobs:
   trigger-main:
     name: Trigger Main Workflow
