@@ -59,27 +59,43 @@ jobs:
           cd microservices-demo/deploy/docker-compose
           docker compose up -d
 
-          echo "⏳ Waiting for readiness endpoint..."
+          echo "⏳ Waiting for containers to initialize (10s)..."
+          sleep 10
 
-          for i in {1..30}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/customers/57a98d98e4b00679b4a830af || true)
-
-            if [ "$STATUS" = "200" ] || [ "$STATUS" = "404" ]; then
-              echo "✅ Application ready (status=$STATUS)"
-              break
-            fi
-
-            echo "Attempt $i/30: not ready (status=$STATUS)"
-            sleep 3
-          done
-
-          if [ "$STATUS" != "200" ] && [ "$STATUS" != "404" ]; then
-            echo "❌ Application did not become ready"
-            docker ps
-            docker compose logs --tail=100
+          CONTAINER_COUNT=$(docker ps -q | wc -l)
+          if [ "$CONTAINER_COUNT" -gt 0 ]; then
+            echo "✅ $CONTAINER_COUNT containers running"
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --no-trunc
+          else
+            echo "❌ No containers running"
             exit 1
           fi
 
+          echo "⏳ Waiting for edge-router to accept connections..."
+
+          for i in {1..30}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 http://localhost:80 || true)
+
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ edge-router is ready!"
+              break
+            fi
+
+            echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
+            sleep 5
+          done
+
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ edge-router did not become ready"
+            echo "Container status:"
+            docker ps
+            echo "edge-router logs:"
+            docker logs edge-router --tail=50
+            exit 1
+          fi
+
+          echo "⏳ Stabilizing services (30s)..."
+          sleep 30
           echo "✅ All services ready!"
 
       - uses: actions/setup-python@v6
