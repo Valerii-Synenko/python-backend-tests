@@ -54,29 +54,33 @@ jobs:
           repository: Valerii-Synenko/microservices-demo
           path: microservices-demo
 
-      - name: Start microservices
-        working-directory: microservices-demo/deploy/docker-compose
+      - name: Up and run microservices-demo app
         run: |
+          cd microservices-demo/deploy/docker-compose
           docker compose up -d
 
-          echo "⏳ Waiting for application to become ready..."
+          echo "⏳ Waiting for readiness endpoint..."
 
           for i in {1..30}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:80 || true)
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/customers/57a98d98e4b00679b4a830af || true)
 
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Application ready!"
-              exit 0
+            if [ "$STATUS" = "200" ] || [ "$STATUS" = "404" ]; then
+              echo "✅ Application ready (status=$STATUS)"
+              break
             fi
 
-            echo "Attempt $i/30: status=$STATUS"
+            echo "Attempt $i/30: not ready (status=$STATUS)"
             sleep 3
           done
 
-          echo "❌ Application did not become ready"
-          docker compose ps
-          docker compose logs --tail=100
-          exit 1
+          if [ "$STATUS" != "200" ] && [ "$STATUS" != "404" ]; then
+            echo "❌ Application did not become ready"
+            docker ps
+            docker compose logs --tail=100
+            exit 1
+          fi
+
+          echo "✅ All services ready!"
 
       - uses: actions/setup-python@v6
         with:
