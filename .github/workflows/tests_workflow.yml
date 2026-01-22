@@ -54,49 +54,25 @@ jobs:
           repository: Valerii-Synenko/microservices-demo
           path: microservices-demo
 
-      - name: Set up Environment
+      - name: Start microservices
+        working-directory: microservices-demo/deploy/docker-compose
         run: |
-          cd microservices-demo/deploy/docker-compose
-          docker compose up -d
+          docker compose up -d --wait
 
-          echo "⏳ Waiting for containers to initialize (10s)..."
-          sleep 10
-
-          CONTAINER_COUNT=$(docker ps -q | wc -l)
-          if [ "$CONTAINER_COUNT" -gt 0 ]; then
-            echo "✅ $CONTAINER_COUNT containers running"
-            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --no-trunc
-          else
-            echo "❌ No containers running"
-            exit 1
-          fi
-
-          echo "⏳ Waiting for edge-router to accept connections..."
-
+          echo "⏳ Waiting for application on port $PORT..."
           for i in {1..30}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 http://localhost:80 || true)
-
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ edge-router is ready!"
-              break
-            fi
-
-            echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
-            sleep 5
+          if curl -sf ${{ vars.BASE_URL }}:80/ > /dev/null 2>&1; then
+           echo "✅ Application ready!"
+           exit 0
+          fi
+          echo "Attempt $i/30..."
+          sleep 2
           done
 
-          if [ "$STATUS" != "200" ]; then
-            echo "❌ edge-router did not become ready"
-            echo "Container status:"
-            docker ps
-            echo "edge-router logs:"
-            docker logs edge-router --tail=50
-            exit 1
-          fi
-
-          echo "⏳ Stabilizing services (30s)..."
-          sleep 30
-          echo "✅ All services ready!"
+          echo "❌ Application failed to start"
+          docker compose ps
+          docker compose logs --tail=50
+          exit 1
 
       - uses: actions/setup-python@v6
         with:
@@ -177,8 +153,8 @@ jobs:
           cat > allure-results/environment.properties << EOF
           ENV=${{ inputs.env || 'DEV' }}
           BRANCH=${{ github.ref_name }}
-          URL=${{ vars.BASE_URL }}
-          COMMIT=${{ github.event.head_commit.message }}
+          URL=${{ vars.BASE_URL || 'http://localhost' }}
+          COMMIT_MSG=${{ github.event.pull_request.title || github.event.head_commit.message || 'manual run' }}
           TRIGGERED=@${{ github.actor }}
           EOF
 
