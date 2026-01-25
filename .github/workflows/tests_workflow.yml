@@ -78,6 +78,7 @@ jobs:
           path: allure-results
           retention-days: 1
 
+  # !!! EXPERIMENT !!!
   report:
     name: Generate and Publish Report
     runs-on: ubuntu-latest
@@ -85,14 +86,18 @@ jobs:
     if: always()
 
     steps:
-      - name: Checkout test-framework repository
-        uses: actions/checkout@v6
-
-      - name: Create report
-        uses: ./.github/actions/create-allure-report
+      - name: Download Allure results
+        uses: actions/download-artifact@v7
         with:
-          env: ${{ inputs.env || 'DEV' }}
-          base_url: ${{ vars.BASE_URL }}
+          name: allure-results
+          path: allure-results
+
+      - name: Generate and Publish Allure Report
+        uses: simple-elf/allure-report-action@master
+        with:
+          allure_results: allure-results
+          allure_history: allure-history
+          keep_reports: 20
 
       - name: Attach Summary Link
         run: |
