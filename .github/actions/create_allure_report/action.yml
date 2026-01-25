@@ -1,0 +1,85 @@
+inputs:
+  env:
+    description: Target environment
+    required: false
+    default: DEV
+
+  base_url:
+    description: Base URL of the tested application
+    required: false
+    default: http://localhost
+
+runs:
+  using: composite
+  steps:
+    - name: Download Allure results
+      uses: actions/download-artifact@v7
+      with:
+        name: allure-results
+        path: allure-results
+
+    - name: Checkout gh-pages branch (for history)
+      uses: actions/checkout@v6
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages
+
+    - name: Install Allure CLI
+      shell: bash
+      run: |
+        echo "📥 Installing Allure CLI..."
+        wget -q https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.tgz
+        tar -zxf allure-2.25.0.tgz
+        sudo mv allure-2.25.0 /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+        allure --version
+
+    - name: Add Allure metadata
+      shell: bash
+      run: |
+        cat > allure-results/executor.json << EOF
+        {
+          "name": "GitHub Actions",
+          "type": "github",
+          "buildOrder": "${{ github.run_number }}",
+          "buildName": "Run #${{ github.run_number }}",
+          "buildUrl": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+        }
+        EOF
+
+        cat > allure-results/environment.properties << EOF
+        ENV=${{ inputs.env || 'DEV' }}
+        BRANCH=${{ github.ref_name }}
+        URL=${{ vars.BASE_URL || 'http://localhost' }}
+        COMMIT_MSG=${{ github.event.pull_request.title || github.event.head_commit.message || 'manual run' }}
+        TRIGGERED=@${{ github.actor }}
+        EOF
+
+    - name: Generate Allure Report (with history)
+      shell: bash
+      run: |
+        if [ -d "gh-pages/history" ]; then
+          echo "✅ History found from previous runs"
+          mkdir -p allure-results/history
+          cp -r gh-pages/history/* allure-results/history/
+        else
+          echo "ℹ️ No history found (first run)"
+        fi
+
+        echo "📊 Generating Allure report..."
+        allure generate allure-results -o allure-report --clean
+
+        if [ -d "allure-report/history" ]; then
+          echo "✅ Report generated successfully"
+          ls -la allure-report/history/
+        fi
+
+    - name: Publish report to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: allure-report
+        keep_files: false
+        commit_message: "📊 Allure Report - Run #${{ github.run_number }}: ${{ github.event.head_commit.message }}"
