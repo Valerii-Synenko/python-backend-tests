@@ -45,7 +45,7 @@ runs:
           "buildOrder": "${{ github.run_number }}",
           "buildName": "Run #${{ github.run_number }}",
           "buildUrl": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-          "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
         }
         EOF
 
