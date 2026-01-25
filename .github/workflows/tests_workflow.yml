@@ -103,6 +103,10 @@ jobs:
           allure_results: allure-results
           allure_history: allure-history
           keep_reports: 5
+          gh_pages: gh-pages
+          github_run_num: ${{ github.run_number }}
+          github_run_id: ${{ github.run_id }}
+          github_repo: ${{ github.repository }}
 
       - name: Deploy report to Github Pages
         if: always()
