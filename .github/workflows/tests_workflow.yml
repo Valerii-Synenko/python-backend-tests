@@ -118,7 +118,7 @@ jobs:
           ENV=${{ inputs.env || 'DEV' }}
           BRANCH=${{ github.ref_name }}
           BASE_URL=${{ vars.BASE_URL || 'http://localhost' }}
-          COMMIT=${{ github.sha }}
+          COMMIT=${{ github.event.pull_request.title || github.event.head_commit.message || 'manual run' }}
           TRIGGERED_BY=${{ github.actor }}
           EOF
 
