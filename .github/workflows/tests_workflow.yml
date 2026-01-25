@@ -48,55 +48,58 @@ jobs:
       - name: Checkout test-framework
         uses: actions/checkout@v6
 
-      - name: Checkout microservices-demo
-        uses: actions/checkout@v6
-        with:
-          repository: Valerii-Synenko/microservices-demo
-          path: microservices-demo
-
-      - name: Up and run microservices-demo app
-        run: |
-          cd microservices-demo/deploy/docker-compose
-          docker compose up -d
-
-          echo "⏳ Waiting for containers to initialize (10s)..."
-          sleep 10
-
-          CONTAINER_COUNT=$(docker ps -q | wc -l)
-          if [ "$CONTAINER_COUNT" -gt 0 ]; then
-            echo "✅ $CONTAINER_COUNT containers running"
-            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --no-trunc
-          else
-            echo "❌ No containers running"
-            exit 1
-          fi
-
-          echo "⏳ Waiting for edge-router to accept connections..."
-
-          for i in {1..30}; do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 http://localhost:80 || true)
-
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ edge-router is ready!"
-              break
-            fi
-
-            echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
-            sleep 5
-          done
-
-          if [ "$STATUS" != "200" ]; then
-            echo "❌ edge-router did not become ready"
-            echo "Container status:"
-            docker ps
-            echo "edge-router logs:"
-            docker logs edge-router --tail=50
-            exit 1
-          fi
-
-          echo "⏳ Stabilizing services (30s)..."
-          sleep 30
-          echo "✅ All services ready!"
+      - name: Install microservices-demo
+        uses: ./.github/actions/deploy-microservice-demo-app
+#
+#      - name: Checkout microservices-demo
+#        uses: actions/checkout@v6
+#        with:
+#          repository: Valerii-Synenko/microservices-demo
+#          path: microservices-demo
+#
+#      - name: Up and run microservices-demo app
+#        run: |
+#          cd microservices-demo/deploy/docker-compose
+#          docker compose up -d
+#
+#          echo "⏳ Waiting for containers to initialize (10s)..."
+#          sleep 10
+#
+#          CONTAINER_COUNT=$(docker ps -q | wc -l)
+#          if [ "$CONTAINER_COUNT" -gt 0 ]; then
+#            echo "✅ $CONTAINER_COUNT containers running"
+#            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" --no-trunc
+#          else
+#            echo "❌ No containers running"
+#            exit 1
+#          fi
+#
+#          echo "⏳ Waiting for edge-router to accept connections..."
+#
+#          for i in {1..30}; do
+#            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 http://localhost:80 || true)
+#
+#            if [ "$STATUS" = "200" ]; then
+#              echo "✅ edge-router is ready!"
+#              break
+#            fi
+#
+#            echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
+#            sleep 5
+#          done
+#
+#          if [ "$STATUS" != "200" ]; then
+#            echo "❌ edge-router did not become ready"
+#            echo "Container status:"
+#            docker ps
+#            echo "edge-router logs:"
+#            docker logs edge-router --tail=50
+#            exit 1
+#          fi
+#
+#          echo "⏳ Stabilizing services (30s)..."
+#          sleep 30
+#          echo "✅ All services ready!"
 
       - uses: actions/setup-python@v6
         with:
