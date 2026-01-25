@@ -97,6 +97,31 @@ jobs:
           name: allure-results
           path: allure-results
 
+      - name: Add Allure metadata
+        if: always()
+        shell: bash
+        run: |
+          echo "Adding Allure executor.json"
+          cat > allure-results/executor.json << EOF
+          {
+            "name": "GitHub Actions",
+            "type": "github",
+            "buildOrder": "${{ github.run_number }}",
+            "buildName": "Run #${{ github.run_number }}",
+            "buildUrl": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "reportUrl": "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          }
+          EOF
+
+          echo "Adding Allure environment.properties"
+          cat > allure-results/environment.properties << EOF
+          ENV=${{ inputs.env || 'DEV' }}
+          BRANCH=${{ github.ref_name }}
+          BASE_URL=${{ vars.BASE_URL || 'http://localhost' }}
+          COMMIT=${{ github.sha }}
+          TRIGGERED_BY=${{ github.actor }}
+          EOF
+
       - name: Get Allure history
         uses: actions/checkout@v6
         if: always()
