@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 4 * * *"
 
+permissions:
+  contents: write
+
 jobs:
   trigger-tests:
     name: ⏰ Trigger Tests Workflow (QA)
