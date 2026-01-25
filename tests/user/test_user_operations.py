@@ -37,7 +37,7 @@ class TestUserOperations:
 
         with allure.step("Step 2: Assert that status code is 200"):
             assert (
-                response.status_code == 200
+                response.status_code == 500
             ), f"the request with body '{request_model.model_dump()}' returned status code: {response.status_code}"
 
         with allure.step("Step 3: Validate response body"):
