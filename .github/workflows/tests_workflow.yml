@@ -88,6 +88,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Checkout test-framework
+        uses: actions/checkout@v6
+
       - name: Download Allure results
         uses: actions/download-artifact@v7
         with:
