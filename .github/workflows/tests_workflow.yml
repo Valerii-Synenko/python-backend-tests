@@ -50,6 +50,8 @@ jobs:
 
       - name: Install microservices-demo
         uses: ./.github/actions/deploy-microservice-demo-app
+        with:
+          health_check_url: ${{ vars.BASE_URL || 'http://localhost:80/' }}
 #
 #      - name: Checkout microservices-demo
 #        uses: actions/checkout@v6

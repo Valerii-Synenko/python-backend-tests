@@ -1,5 +1,11 @@
 name: Deploy microservices-demo app
 description: Deploy microservices-demo application using docker compose
+
+inputs:
+  health_check_url:
+    description: The URL to check service readiness
+    required: true
+
 runs:
   using: composite
 
@@ -31,7 +37,7 @@ runs:
         echo "⏳ Waiting for edge-router to accept connections..."
 
         for i in {1..30}; do
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 ${{ inputs.BASE_URL }}:80 || true)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 ${{ inputs.health_check_url }}:80 || true)
 
           if [ "$STATUS" = "200" ]; then
             echo "✅ edge-router is ready!"
