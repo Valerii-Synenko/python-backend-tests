@@ -37,7 +37,7 @@ runs:
         echo "⏳ Waiting for edge-router to accept connections..."
 
         for i in {1..30}; do
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 ${{ inputs.health_check_url }}:80 || true)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 2 ${{ inputs.health_check_url }} || true)
 
           if [ "$STATUS" = "200" ]; then
             echo "✅ edge-router is ready!"
@@ -45,6 +45,7 @@ runs:
           fi
 
           echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
+          echo ${{ inputs.health_check_url }}
           sleep 5
         done
 
