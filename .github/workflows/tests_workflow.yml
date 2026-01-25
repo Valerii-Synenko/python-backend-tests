@@ -115,6 +115,14 @@ jobs:
           allure_history: allure-history
           keep_reports: 7
 
+      - name: Deploy report to Github Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        env:
+          PERSONAL_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: allure-history
+
       - name: Attach Summary Link
         run: |
           echo "## 📊 Allure Report" >> $GITHUB_STEP_SUMMARY
