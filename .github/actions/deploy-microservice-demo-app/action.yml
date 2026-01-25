@@ -45,7 +45,6 @@ runs:
           fi
 
           echo "Attempt $i/30: edge-router not ready (status=$STATUS)"
-          echo ${{ inputs.health_check_url }}
           sleep 5
         done
 
