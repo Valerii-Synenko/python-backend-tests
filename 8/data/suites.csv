@@ -1,0 +1,3 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"Test is verifying that a user can do registration with specified fields.","322","User registration","tests.user","Tue Jan 27 04:24:41 UTC 2026","passed","Tue Jan 27 04:24:42 UTC 2026","TestUserOperations","test_user_operations","",""
+"Test is verifying that a user can do registration with specified fields.","73","User registration","tests.user","Tue Jan 27 04:24:42 UTC 2026","passed","Tue Jan 27 04:24:42 UTC 2026","TestUserOperations","test_user_operations","",""
