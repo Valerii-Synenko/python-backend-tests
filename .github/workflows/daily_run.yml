@@ -1,8 +1,8 @@
-name: Scheduled daily run
+name: ⏰ Scheduled daily run
 
 on:
   schedule:
-    - cron: "0 4 * * *"
+    - cron: 0 4 7,21 * *"
 
 permissions:
   contents: write
