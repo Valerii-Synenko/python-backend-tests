@@ -1,4 +1,4 @@
-name: ⏰ Scheduled daily run
+name: ⏰ Scheduled test run
 
 on:
   schedule:
