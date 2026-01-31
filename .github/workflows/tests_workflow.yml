@@ -30,6 +30,8 @@ on:
         type: string
         default: QA
 
+concurrency: concurrency-test-run
+
 run-name: "🚀 test run #${{ github.run_number }} | ${{ github.event.head_commit.message }}"
 
 permissions:
