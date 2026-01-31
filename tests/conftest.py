@@ -17,7 +17,6 @@ def faker() -> Faker:
 
     Returns:
         Faker: Faker object with specified locale.
-
     """
     locale: str | None = os.getenv("FAKER_LOCALE", "en_US")
     return Faker(locale=locale)
