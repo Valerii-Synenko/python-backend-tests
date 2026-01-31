@@ -2,7 +2,7 @@ name: ⏰ Scheduled test run
 
 on:
   schedule:
-    - cron: 0 4 7,21 * *"
+    - cron: "0 4 7,21 * *"
 
 permissions:
   contents: write
