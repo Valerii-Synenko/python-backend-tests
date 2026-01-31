@@ -49,6 +49,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install microservices-demo
+        timeout-minutes: 3
         uses: ./.github/actions/deploy-microservice-demo-app
         with:
           health_check_url: ${{ vars.BASE_URL || 'http://localhost/' }}
@@ -62,6 +63,7 @@ jobs:
         uses: ./.github/actions/set-up-poetry
 
       - name: Run PyTest
+        timeout-minutes: 5
         run: poetry run pytest --alluredir=allure-results -v
 
       - name: Tear down Environment
