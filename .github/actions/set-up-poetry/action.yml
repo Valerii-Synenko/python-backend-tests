@@ -14,7 +14,7 @@ runs:
       uses: actions/cache@v5
       with:
         path: .venv
-        key: venv-${{ runner.os }}-py3.13-${{ hashFiles('poetry.lock') }}
+        key: venv-${{ runner.os }}-py3.11-${{ hashFiles('poetry.lock') }}
 
     - name: Install Poetry dependencies
       shell: bash
