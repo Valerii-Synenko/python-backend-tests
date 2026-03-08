@@ -9,9 +9,7 @@ load_dotenv()
 
 
 class _CollectionWrapper:
-    """
-    Wrapper for MongoDB collection. This wrapper is applicable for the working with context of one collection.
-    """
+    """Wrapper for MongoDB collection. This wrapper is applicable for the working with context of one collection."""
 
     def __init__(self, collection):
         self._collection = collection
@@ -70,9 +68,7 @@ class _CollectionWrapper:
 
 
 class BaseMongoClient:
-    """
-    Base class for all MongoDB clients.
-    """
+    """Base class for all MongoDB clients."""
 
     def __init__(self, host: str, port: int, db_name: str):
         if not host or not port or not db_name:
@@ -84,21 +80,22 @@ class BaseMongoClient:
         self._db: Database = self._client[db_name]
         self._collections_cache: dict[Any, _CollectionWrapper] = {}
 
-    def close(self) -> None:
-        """
-        Close the MongoDB client.
-        """
+    def close_connection(self) -> None:
+        """Close the MongoDB client."""
         self._client.close()
 
     def get_collection(self, name: str) -> _CollectionWrapper:
         """
         Returns a collection wrapper for by the given name.
+
         Args:
             name: The name of the collection you want to get a collection wrapper for.
 
-        Returns: The collection wrapper by the given name.
+        Returns:
+            The collection wrapper by the given name.
 
-        Raises: `ValueError` if you try to get a collection wrapper that doesn't exist.
+        Raises:
+            `ValueError` if you try to get a collection wrapper that doesn't exist.
 
         """
         existing_collections = self._db.list_collection_names()
