@@ -2,7 +2,7 @@ import os
 
 from dotenv import load_dotenv
 
-from db_clients.mongo.base_mongo_client import BaseMongoClient
+from db_clients.mongo.base_client import BaseMongoClient
 
 load_dotenv()
 
@@ -16,6 +16,6 @@ class OrdersMongo(BaseMongoClient):
         )
 
     @property
-    def customer_order(self):
+    def customer_order_collection(self):
         """Returns the customer_order collection wrapper"""
         return self.get_collection("customerOrder")
