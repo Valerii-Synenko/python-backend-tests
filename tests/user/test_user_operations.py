@@ -18,9 +18,7 @@ import allure
 import pytest
 from requests import Response
 
-from src.models.responses.register_user_response import (
-    RegisterUserResponseModel as ResponseModel,
-)
+from src.models.api.responses.register_user_response import RegisterUserResponseModel
 from tests.data.user_data import user_data
 
 
@@ -41,4 +39,4 @@ class TestUserOperations:
             ), f"the request with body '{request_model.model_dump()}' returned status code: {response.status_code}"
 
         with allure.step("Step 3: Validate response body"):
-            ResponseModel.model_validate(response.json())
+            RegisterUserResponseModel.model_validate(response.json())

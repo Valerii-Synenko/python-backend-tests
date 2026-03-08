@@ -3,7 +3,7 @@
 import requests
 
 from src.api_clients.base_client import BaseClient
-from src.models.requests.register_user_requests import RegisterUserRequestsModel
+from src.models.api.requests.register_user_requests import RegisterUserRequestsModel
 
 
 class UserClient(BaseClient):
